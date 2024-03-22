@@ -9,17 +9,27 @@ const initialState = {
   status: "loading",
 };
 
-function reducer(state, action){
+function reducer(state, action) {
+  switch (action.type) {
+    case "dataReceived":
+      return { ...state, questions: action.payload, status: "ready" }; // data is received
+
+    case "dataFailed":
+      return { ...state, status: "error" }; // when the data fetching is  failed
+
+    default:
+      throw new Error("Action unknown"); // is no other cases match then it throw this error
+  }
 }
 
 export default function App() {
-  const [state, dispatch] = useReducer(reducer, initialState); // to display data in the Ui we need state
+  const [state, dispatch] = useReducer(reducer, initialState); // to display data in the Ui we need state (we are using useReducer )
 
   useEffect(() => {
     fetch("http://localhost:9000/questions")
       .then((res) => res.json())
-      .then((data) => console.log(data))
-      .catch((error) => console.error("ERROR"));
+      .then((data) => dispatch({ type: "dataReceived", payload: data }))
+      .catch((err) => dispatch({ type: "dataFailed" }));
   }, []); // want to render data ONLY on mount
 
   return (
