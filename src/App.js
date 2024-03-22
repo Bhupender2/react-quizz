@@ -1,6 +1,9 @@
 import { useEffect, useReducer } from "react";
 import Header from "./Header.js";
 import Main from "./Main.js";
+import Loader from "./Loader.js";
+import Error from "./Error.js";
+import StartScreen from "./StartScreen.js";
 
 const initialState = {
   questions: [],
@@ -23,7 +26,8 @@ function reducer(state, action) {
 }
 
 export default function App() {
-  const [state, dispatch] = useReducer(reducer, initialState); // to display data in the Ui we need state (we are using useReducer )
+  const [{ questions, status }, dispatch] = useReducer(reducer, initialState); // to display data in the Ui we need state (we are using useReducer )
+  const numQuestions= questions.length;
 
   useEffect(() => {
     fetch("http://localhost:9000/questions")
@@ -36,11 +40,12 @@ export default function App() {
     <div className="app">
       <Header />
       <Main>
-        <p>1/15</p>
-        <p>question </p>
+        {status === "loading" && <Loader />}
+        {status === "error" && <Error />}
+        {status==="ready"&& <StartScreen numQuestions={numQuestions}/>}
       </Main>
     </div>
   );
 }
 
-// we added a scripts in package.json to render the fake api data  "server":"json-server --watch data/questions.json --port 8000"
+// we added a scripts in package.json to render the fake api data  "server":"json-server --watch data/questions.json --port 9000 --host localhost"
