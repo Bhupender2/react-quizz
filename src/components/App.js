@@ -13,6 +13,7 @@ const initialState = {
   status: "loading",
   index: 0, // creating an index state for the current element beacuse on changing the index of element the UI will re-render .
   answer: null, // basically store which option is selected or we can say what is the answer (index no of the Options ARRAY)
+  points:0 //this needs to be updated on the screen so it will store as states
 };
 
 function reducer(state, action) {
