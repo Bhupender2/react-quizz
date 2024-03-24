@@ -13,7 +13,7 @@ const initialState = {
   status: "loading",
   index: 0, // creating an index state for the current element beacuse on changing the index of element the UI will re-render .
   answer: null, // basically store which option is selected or we can say what is the answer (index no of the Options ARRAY)
-  points:0 //this needs to be updated on the screen so it will store as states
+  points: 0, //this needs to be updated on the screen so it will store as states
 };
 
 function reducer(state, action) {
@@ -28,7 +28,15 @@ function reducer(state, action) {
       return { ...state, status: "active" };
 
     case "newAnswer":
-      return { ...state, answer: action.payload };
+      const question = state.questions.at(state.index);
+      return {
+        ...state,
+        answer: action.payload,
+        points:
+          action.payload === question.correctOption
+            ? state.points + question.points
+            : state.points,
+      };
 
     default:
       throw new Error("Action unknown"); // is no other cases match then it throw this error
@@ -36,7 +44,7 @@ function reducer(state, action) {
 }
 
 export default function App() {
-  const [{ questions, status, index , answer }, dispatch] = useReducer(
+  const [{ questions, status, index, answer }, dispatch] = useReducer(
     reducer,
     initialState
   ); // to display data in the Ui we need state (we are using useReducer )
@@ -58,7 +66,13 @@ export default function App() {
         {status === "ready" && (
           <StartScreen numQuestions={numQuestions} dispatch={dispatch} />
         )}
-        {status === "active" && <Question question={questions[index]} answer={answer} dispatch={dispatch}/>}
+        {status === "active" && (
+          <Question
+            question={questions[index]}
+            answer={answer}
+            dispatch={dispatch}
+          />
+        )}
       </Main>
     </div>
   );
