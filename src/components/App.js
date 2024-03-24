@@ -6,6 +6,7 @@ import Error from "./Error.js";
 import StartScreen from "./StartScreen.js";
 import Question from "./Question.js";
 import NextButton from "./NextButton.js";
+import Progress from "./Progress.js";
 
 const initialState = {
   questions: [],
@@ -39,7 +40,7 @@ function reducer(state, action) {
             : state.points,
       };
     case "nextQuestion":
-      return { ...state, index: state.index + 1 , answer:null};
+      return { ...state, index: state.index + 1, answer: null };
 
     default:
       throw new Error("Action unknown"); // is no other cases match then it throw this error
@@ -47,11 +48,14 @@ function reducer(state, action) {
 }
 
 export default function App() {
-  const [{ questions, status, index, answer }, dispatch] = useReducer(
+  const [{ questions, status, index, answer, points }, dispatch] = useReducer(
     reducer,
     initialState
   ); // to display data in the Ui we need state (we are using useReducer )
   const numQuestions = questions.length;
+  const totalPoints = questions.reduce((acc, curr) => {
+    return acc + curr.points;
+  }, 0);
 
   useEffect(() => {
     fetch("http://localhost:9000/questions")
@@ -71,12 +75,19 @@ export default function App() {
         )}
         {status === "active" && (
           <>
+            <Progress
+              index={index}
+              numQuestions={numQuestions}
+              points={points}
+              totalPoints={totalPoints}
+              answer={answer}
+            />
             <Question
               question={questions[index]}
               answer={answer}
               dispatch={dispatch}
             />
-            <NextButton  dispatch={dispatch} answer={answer}/>
+            <NextButton dispatch={dispatch} answer={answer} />
           </>
         )}
       </Main>
