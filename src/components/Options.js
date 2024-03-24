@@ -1,6 +1,6 @@
 function Options({ question, answer, dispatch }) {
   return (
-    <div className="options">
+  <div className={`options`}>
       {question.options.map((option, index) => (
         <button
           className="btn btn-option"
