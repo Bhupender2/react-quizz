@@ -1,4 +1,4 @@
-export default function FinishScreen({ points, totalPoints }) {
+export default function FinishScreen({ points, totalPoints, highscore }) {
   const percentage = (points / totalPoints) * 100;
 
   let emoji;
@@ -13,7 +13,7 @@ export default function FinishScreen({ points, totalPoints }) {
         <span>{emoji}</span> You have scored <strong>{points}</strong> out of{" "}
         {totalPoints} {Math.ceil(percentage)} %
       </p>
-      <p className="highscore"></p>
+      <p className="highscore">(Highscore : {highscore} Points)</p>
     </>
   );
 }

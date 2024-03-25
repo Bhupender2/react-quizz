@@ -17,6 +17,7 @@ const initialState = {
   index: 0, // creating an index state for the current element beacuse on changing the index of element the UI will re-render .
   answer: null, // basically store which option is selected or we can say what is the answer (index no of the Options ARRAY)
   points: 0, //this needs to be updated on the screen so it will store as states
+  highscore: 0, // setting the initial state of highScore to 0
 };
 
 function reducer(state, action) {
@@ -44,7 +45,12 @@ function reducer(state, action) {
       return { ...state, index: state.index + 1, answer: null };
 
     case "finish":
-      return { ...state, status: "finished" };
+      return {
+        ...state,
+        status: "finished",
+        highscore:
+          state.points > state.highscore ? state.points : state.highscore,
+      };
 
     default:
       throw new Error("Action unknown"); // is no other cases match then it throw this error
@@ -52,10 +58,8 @@ function reducer(state, action) {
 }
 
 export default function App() {
-  const [{ questions, status, index, answer, points }, dispatch] = useReducer(
-    reducer,
-    initialState
-  ); // to display data in the Ui we need state (we are using useReducer )
+  const [{ questions, status, index, answer, points, highscore }, dispatch] =
+    useReducer(reducer, initialState); // to display data in the Ui we need state (we are using useReducer )
   const numQuestions = questions.length;
   const totalPoints = questions.reduce((acc, curr) => {
     return acc + curr.points;
@@ -100,7 +104,11 @@ export default function App() {
           </>
         )}
         {status === "finished" && (
-          <FinishScreen points={points} totalPoints={totalPoints} />
+          <FinishScreen
+            points={points}
+            totalPoints={totalPoints}
+            highscore={highscore}
+          />
         )}
       </Main>
     </div>
