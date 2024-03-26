@@ -20,7 +20,10 @@ const initialState = {
   answer: null, // basically store which option is selected or we can say what is the answer (index no of the Options ARRAY)
   points: 0, //this needs to be updated on the screen so it will store as states
   highscore: 0, // setting the initial state of highScore to 0
+  secondRemaining: null, // total time for the Timer .
 };
+
+const SECS_PER_QUESTIONS=30;
 
 function reducer(state, action) {
   switch (action.type) {
@@ -31,7 +34,7 @@ function reducer(state, action) {
       return { ...state, status: "error" }; // when the data fetching is  failed
 
     case "start":
-      return { ...state, status: "active" };
+      return { ...state, status: "active", secondRemaining:state.questions.length*SECS_PER_QUESTIONS };
 
     case "newAnswer":
       const question = state.questions.at(state.index);
@@ -64,16 +67,22 @@ function reducer(state, action) {
         status: "ready",
       };
     // return{...initialState, questions:state.questions, status:"ready"}
-    case "timeout":
-      return { ...state, status: "finished" };
+    case "tick":
+      return {
+        ...state,
+        secondRemaining: state.secondRemaining - 1,
+        status: state.secondRemaining === 0 ? "finished" : state.status,
+      };
     default:
       throw new Error("Action unknown"); // is no other cases match then it throw this error
   }
 }
 
 export default function App() {
-  const [{ questions, status, index, answer, points, highscore }, dispatch] =
-    useReducer(reducer, initialState); // to display data in the Ui we need state (we are using useReducer )
+  const [
+    { questions, status, index, answer, points, highscore, secondRemaining },
+    dispatch,
+  ] = useReducer(reducer, initialState); // to display data in the Ui we need state (we are using useReducer )
   const numQuestions = questions.length;
   const totalPoints = questions.reduce((acc, curr) => {
     return acc + curr.points;
@@ -110,7 +119,7 @@ export default function App() {
               dispatch={dispatch}
             />
             <Footer>
-              <Timer dispatch={dispatch} />
+              <Timer dispatch={dispatch} secondRemaining={secondRemaining} />
               <NextButton
                 dispatch={dispatch}
                 answer={answer}
