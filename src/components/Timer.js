@@ -4,7 +4,7 @@ import { useEffect } from "react";
 export default function Timer({ dispatch, secondRemaining }) {
   const mins= Math.floor(secondRemaining/60);
   const secs=secondRemaining%60
-  useEffect(() => {
+  useEffect(() => {  
     const intervalId = setInterval(() => {
       //basically setInterval is part of Browser Web API so we are interacting with the world outside of the scope of the component (outside of the reract universe)
 
