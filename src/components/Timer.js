@@ -6,7 +6,7 @@ export default function Timer({ dispatch, secondRemaining }) {
   const secs=secondRemaining%60
   useEffect(() => {  
     const intervalId = setInterval(() => {
-      //basically setInterval is part of Browser Web API so we are interacting with the world outside of the scope of the component (outside of the reract universe)
+      //basically setInterval is part of Browser Web API so we are interacting with the world outside of the scope of the component (outside of the react universe)
 
       dispatch({ type: "tick" });
     }, 1000);
