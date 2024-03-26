@@ -11,7 +11,7 @@ export default function FinishScreen({ points, totalPoints, highscore , dispatch
     <>
       <p className="result">
         <span>{emoji}</span> You have scored <strong>{points}</strong> out of{" "}
-        {totalPoints} {Math.ceil(percentage)} %
+        {totalPoints} ({Math.ceil(percentage)}%)
       </p>
       <p className="highscore">(Highscore : {highscore} Points)</p>
       <button className="btn btn-ui" onClick={() => dispatch({type:"restart"})}>

@@ -64,7 +64,8 @@ function reducer(state, action) {
         status: "ready",
       };
     // return{...initialState, questions:state.questions, status:"ready"}
-
+    case "timeout":
+      return { ...state, status: "finished" };
     default:
       throw new Error("Action unknown"); // is no other cases match then it throw this error
   }
@@ -108,16 +109,15 @@ export default function App() {
               answer={answer}
               dispatch={dispatch}
             />
-           <Footer>
-           <Timer/>
-           <NextButton
-              dispatch={dispatch}
-              answer={answer}
-              index={index}
-              numQuestions={numQuestions}
-            />
-           </Footer>
-
+            <Footer>
+              <Timer dispatch={dispatch} />
+              <NextButton
+                dispatch={dispatch}
+                answer={answer}
+                index={index}
+                numQuestions={numQuestions}
+              />
+            </Footer>
           </>
         )}
         {status === "finished" && (
