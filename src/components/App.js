@@ -23,7 +23,7 @@ const initialState = {
   secondRemaining: null, // total time for the Timer .
 };
 
-const SECS_PER_QUESTIONS=30;
+const SECS_PER_QUESTIONS = 30;
 
 function reducer(state, action) {
   switch (action.type) {
@@ -34,7 +34,11 @@ function reducer(state, action) {
       return { ...state, status: "error" }; // when the data fetching is  failed
 
     case "start":
-      return { ...state, status: "active", secondRemaining:state.questions.length*SECS_PER_QUESTIONS };
+      return {
+        ...state,
+        status: "active",
+        secondRemaining: state.questions.length * SECS_PER_QUESTIONS,
+      };
 
     case "newAnswer":
       const question = state.questions.at(state.index);
